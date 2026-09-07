@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { createVendorApplication } from "../services/vendorService";
 
-const WHATSAPP_NUMBER = "2348161228803";
-const VENDOR_PRICE = 30000;
+
+
 
 function VendorSection({ festival }) {
+
+const whatsappNumber = festival.whatsapp;
+const vendorPrice = Number(festival.vendor_price);
+
+
   const [formData, setFormData] = useState({
     business_name: "",
     contact_name: "",
@@ -16,12 +21,13 @@ function VendorSection({ festival }) {
     number_of_stands: 1,
   });
 
+    
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
   const totalAmount =
-    Number(formData.number_of_stands) * VENDOR_PRICE;
+    Number(formData.number_of_stands) * vendorPrice;
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -50,7 +56,7 @@ function VendorSection({ festival }) {
         description: formData.description || null,
         website_or_social: formData.website_or_social || null,
         number_of_stands: Number(formData.number_of_stands),
-        unit_price: VENDOR_PRICE,
+        unit_price: vendorPrice,
         total_amount: totalAmount,
         status: "PENDING",
       });
@@ -66,7 +72,7 @@ function VendorSection({ festival }) {
         `Email: ${formData.email || "Not provided"}`,
         `Category: ${formData.category || "Not specified"}`,
         `Number of Stands: ${formData.number_of_stands}`,
-        `Price per Stand: ₦${VENDOR_PRICE.toLocaleString()}`,
+        `Price per Stand: ₦${vendorPrice.toLocaleString()}`,
         `Total: ₦${totalAmount.toLocaleString()}`,
         ``,
         `Description: ${formData.description || "Not provided"}`,
@@ -76,7 +82,7 @@ function VendorSection({ festival }) {
       ].join("\n");
 
       const whatsappUrl =
-        `https://wa.me/${WHATSAPP_NUMBER}?text=` +
+       `https://wa.me/${whatsappNumber}?text=` +
         encodeURIComponent(message);
 
       setSuccess(true);
@@ -122,7 +128,7 @@ function VendorSection({ festival }) {
             </p>
 
             <div className="vendor-price">
-              <span>₦{VENDOR_PRICE.toLocaleString()}</span>
+              <span>₦{vendorPrice.toLocaleString()}</span>
               <small>PER STAND</small>
             </div>
 
