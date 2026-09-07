@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { createVestOrder } from "../services/vestService";
 
-const WHATSAPP_NUMBER = "2348161228803";
+
 
 
 function VestSection({ festival }) {
+  const whatsappNumber = festival.whatsapp;
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -63,7 +64,7 @@ function VestSection({ festival }) {
       ].join("\n");
 
       const whatsappUrl =
-        `https://wa.me/${WHATSAPP_NUMBER}?text=` +
+        `https://wa.me/${whatsappNumber}?text=`+
         encodeURIComponent(message);
 
       setSuccess(true);
@@ -98,8 +99,8 @@ function VestSection({ festival }) {
             </h2>
 
             <p>
-              Get your official PAMFITNESS Festival 2026 vest
-              and be part of the movement.
+             Get your official {festival.name} vest
+             and be part of the movement.
             </p>
 
             <div className="vest-price">

@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 
-const EVENT_DATE = new Date("2026-10-10T07:00:00+01:00").getTime();
+function getEventDate(festival) {
+  return new Date(
+    `${festival.event_date}T${festival.start_time}+01:00`
+  ).getTime();
+}
 
-function getTimeLeft() {
-  const difference = EVENT_DATE - Date.now();
+function getTimeLeft(eventDate) {
+  const difference = eventDate - Date.now();
 
   if (difference <= 0) {
     return {
@@ -16,24 +20,36 @@ function getTimeLeft() {
   }
 
   return {
-    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((difference / (1000 * 60)) % 60),
-    seconds: Math.floor((difference / 1000) % 60),
+    days: Math.floor(
+      difference / (1000 * 60 * 60 * 24)
+    ),
+    hours: Math.floor(
+      (difference / (1000 * 60 * 60)) % 24
+    ),
+    minutes: Math.floor(
+      (difference / (1000 * 60)) % 60
+    ),
+    seconds: Math.floor(
+      (difference / 1000) % 60
+    ),
     finished: false,
   };
 }
 
-function Countdown() {
-  const [timeLeft, setTimeLeft] = useState(getTimeLeft());
+function Countdown({ festival }) {
+  const eventDate = getEventDate(festival);
+
+  const [timeLeft, setTimeLeft] = useState(
+    getTimeLeft(eventDate)
+  );
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(getTimeLeft());
+      setTimeLeft(getTimeLeft(eventDate));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [eventDate]);
 
   if (timeLeft.finished) {
     return (
@@ -57,7 +73,10 @@ function Countdown() {
       <div className="countdown-grid">
         {units.map(([label, value]) => (
           <div className="countdown-item" key={label}>
-            <strong>{String(value).padStart(2, "0")}</strong>
+            <strong>
+              {String(value).padStart(2, "0")}
+            </strong>
+
             <span>{label}</span>
           </div>
         ))}

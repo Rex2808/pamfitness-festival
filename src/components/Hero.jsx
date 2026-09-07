@@ -34,7 +34,7 @@ function Hero({ festival }) {
           </a>
         </div>
 
-        <Countdown />
+        <Countdown festival={festival} />
       </div>
     </section>
   );

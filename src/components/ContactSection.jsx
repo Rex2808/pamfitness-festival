@@ -41,8 +41,8 @@ function ContactSection({ festival }) {
           </h2>
 
           <p>
-            Everything you need to know about when and where
-            PAMFITNESS FESTIVAL 2026 is happening.
+           Everything you need to know about when and where
+           {festival.name} is happening.
           </p>
         </div>
 
