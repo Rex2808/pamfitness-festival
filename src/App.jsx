@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   return (
@@ -14,13 +15,15 @@ function App() {
       <Route path="/admin/login" element={<Login />} />
 
       <Route
-        path="/admin"
-        element={
-          <ProtectedAdminRoute>
-            <Dashboard />
-          </ProtectedAdminRoute>
-        }
-      />
+  path="/admin"
+  element={
+    <ProtectedAdminRoute>
+      <AdminLayout>
+        <Dashboard />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
     </Routes>
   );
 }
