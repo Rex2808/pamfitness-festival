@@ -46,18 +46,29 @@ function Footer({ festival }) {
           <div className="footer-contact">
             <p className="footer-title">CONTACT</p>
 
-            <p>EFFURUN SAPELE ROAD, EFFURUN DELTA STATE</p>
+            <p>
+              14, Westend Hospital Road, Off Airport Road,
+              Bendel Estate, DDPA Ugborikoko, Effurun, Delta State
+            </p>
 
-            <a href="tel:08185244131">
-              08185244131
+            <a href="tel:080276645352">
+              080276645352
             </a>
 
-            <a href="tel:08161228803">
-              08161228803
+            <a href="tel:08182066411">
+              08182066411
             </a>
 
-            <a href="tel:08027645352">
-              08027645352
+            <a href="tel:08034551860">
+              08034551860
+            </a>
+
+            <a href="tel:07011780762">
+              07011780762
+            </a>
+
+            <a href="mailto:pamfitnesscentre@gmail.com">
+              pamfitnesscentre@gmail.com
             </a>
 
             <a
