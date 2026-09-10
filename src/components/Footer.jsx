@@ -38,7 +38,7 @@ function Footer({ festival }) {
           <div className="footer-links">
             <p className="footer-title">JOIN</p>
 
-            <a href="#register">Register Free</a>
+            <a href="#register">Register For Free</a>
             <a href="#vest">Get Your Vest</a>
             <a href="#vendors">Become a Vendor</a>
           </div>

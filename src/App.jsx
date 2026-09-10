@@ -9,6 +9,8 @@ import AdminLayout from "./layouts/AdminLayout";
 import Attendees from "./pages/admin/Attendees";
 import Vendors from "./pages/admin/Vendors";
 import VestOrders from "./pages/admin/VestOrders";
+import Settings from "./pages/admin/Settings";
+import Activities from "./pages/admin/Activities";
 
 function App() {
   return (
@@ -23,6 +25,17 @@ function App() {
     <ProtectedAdminRoute>
       <AdminLayout>
         <Dashboard />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/settings"
+  element={
+    <ProtectedAdminRoute>
+      <AdminLayout>
+        <Settings />
       </AdminLayout>
     </ProtectedAdminRoute>
   }
@@ -55,6 +68,17 @@ function App() {
     <ProtectedAdminRoute>
       <AdminLayout>
         <VestOrders />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/activities"
+  element={
+    <ProtectedAdminRoute>
+      <AdminLayout>
+        <Activities />
       </AdminLayout>
     </ProtectedAdminRoute>
   }

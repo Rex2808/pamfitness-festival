@@ -226,7 +226,7 @@ function RegistrationSection({ festival }) {
                 value={formData.gender}
                 onChange={handleChange}
               >
-                <option value="">Prefer not to say</option>
+                
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
                 <option value="Other">Other</option>

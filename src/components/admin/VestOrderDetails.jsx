@@ -1,6 +1,31 @@
-function VestOrderDetails({ order, onClose }) {
+import { useState } from "react";
+import { updateVestOrderStatus } from "../../services/adminService";
+
+function VestOrderDetails({ order, onClose, onUpdated }) {
+  const [updating, setUpdating] = useState(false);
+  const [updateError, setUpdateError] = useState("");
+
   if (!order) {
     return null;
+  }
+
+  async function handleStatusUpdate(status) {
+    try {
+      setUpdating(true);
+      setUpdateError("");
+
+      const updatedOrder = await updateVestOrderStatus(
+        order.id,
+        status
+      );
+
+      onUpdated(updatedOrder);
+      onClose();
+    } catch (err) {
+      setUpdateError(err.message);
+    } finally {
+      setUpdating(false);
+    }
   }
 
   return (
@@ -86,9 +111,46 @@ function VestOrderDetails({ order, onClose }) {
 
               <div className="admin-detail-item">
                 <span>Status</span>
+
                 <strong>
                   {order.status || "—"}
                 </strong>
+
+                <div className="admin-status-actions">
+                  <button
+                    type="button"
+                    disabled={updating}
+                    onClick={() =>
+                      handleStatusUpdate("PENDING")
+                    }
+                  >
+                    Pending
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={updating}
+                    onClick={() =>
+                      handleStatusUpdate("APPROVED")
+                    }
+                  >
+                    Approve
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={updating}
+                    onClick={() =>
+                      handleStatusUpdate("REJECTED")
+                    }
+                  >
+                    Reject
+                  </button>
+                </div>
+
+                {updateError && (
+                  <p>{updateError}</p>
+                )}
               </div>
 
               <div className="admin-detail-item">

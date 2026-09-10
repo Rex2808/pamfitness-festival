@@ -43,7 +43,7 @@ function Navbar({ festival }) {
             className="navbar-cta"
             onClick={closeMenu}
           >
-            REGISTER FREE
+            REGISTER FOR FREE
           </a>
         </nav>
 

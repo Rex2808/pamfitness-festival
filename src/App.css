@@ -1111,6 +1111,40 @@ a {
   line-height: 1.8;
 }
 
+.vest-promo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 18px 0 22px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 193, 7, 0.35);
+  border-radius: 10px;
+  background: rgba(255, 193, 7, 0.08);
+}
+
+.vest-promo strong {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.vest-promo span {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.vest-promo del {
+  margin-right: 8px;
+  opacity: 0.55;
+  font-size: 16px;
+}
+
+.vest-promo small {
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.8;
+  letter-spacing: 0.04em;
+}
+
 .vest-price {
   display: flex;
   align-items: baseline;

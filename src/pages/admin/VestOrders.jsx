@@ -125,10 +125,19 @@ function VestOrders() {
         </div>
       )}
 
-      {selectedOrder && (
+     {selectedOrder && (
   <VestOrderDetails
     order={selectedOrder}
     onClose={() => setSelectedOrder(null)}
+    onUpdated={(updatedOrder) => {
+      setVestOrders((currentOrders) =>
+        currentOrders.map((order) =>
+          order.id === updatedOrder.id
+            ? updatedOrder
+            : order
+        )
+      );
+    }}
   />
 )}
     </div>

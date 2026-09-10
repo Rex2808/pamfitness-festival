@@ -128,12 +128,21 @@ function Vendors() {
         </div>
       )}
 
-            {selectedVendor && (
-        <VendorDetails
-          vendor={selectedVendor}
-          onClose={() => setSelectedVendor(null)}
-        />
-      )}
+        {selectedVendor && (
+  <VendorDetails
+    vendor={selectedVendor}
+    onClose={() => setSelectedVendor(null)}
+    onUpdated={(updatedVendor) => {
+      setVendors((currentVendors) =>
+        currentVendors.map((vendor) =>
+          vendor.id === updatedVendor.id
+            ? updatedVendor
+            : vendor
+        )
+      );
+    }}
+  />
+)}
     </div>
   );
 }

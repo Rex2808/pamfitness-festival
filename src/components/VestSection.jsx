@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createVestOrder } from "../services/vestService";
-
-
-
 
 function VestSection({ festival }) {
   const whatsappNumber = festival.whatsapp;
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -16,10 +14,31 @@ function VestSection({ festival }) {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+
+  const [timeLeft, setTimeLeft] = useState(
+    24 * 60 * 60
+  );
+
   const vestPrice = Number(festival.vest_price);
 
- const totalAmount =
-  Number(formData.quantity) * vestPrice;
+  const totalAmount =
+    Number(formData.quantity) * vestPrice;
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((previousTime) =>
+        previousTime <= 1
+          ? 24 * 60 * 60
+          : previousTime - 1
+      );
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const hours = Math.floor(timeLeft / 3600);
+  const minutes = Math.floor((timeLeft % 3600) / 60);
+  const seconds = timeLeft % 60;
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -57,14 +76,14 @@ function VestSection({ festival }) {
         `Name: ${formData.first_name} ${formData.last_name}`,
         `Phone: ${formData.phone}`,
         `Quantity: ${formData.quantity}`,
-       `Price per vest: ₦${vestPrice.toLocaleString()}`,
+        `Price per vest: ₦${vestPrice.toLocaleString()}`,
         `Total: ₦${totalAmount.toLocaleString()}`,
         ``,
         `Please send me the payment and collection details.`,
       ].join("\n");
 
       const whatsappUrl =
-        `https://wa.me/${whatsappNumber}?text=`+
+        `https://wa.me/${whatsappNumber}?text=` +
         encodeURIComponent(message);
 
       setSuccess(true);
@@ -89,15 +108,43 @@ function VestSection({ festival }) {
       <div className="section-container">
         <div className="vest-content">
           <div className="vest-visual">
-  <img
-    src="/images/pamfitness-vests-3d.png"
-    alt="PAMFITNESS Festival official vest designs"
-  />
-</div>
+            <img
+              src="/images/pamfitness-vests-3d.png"
+              alt="PAMFITNESS Festival official vest designs"
+            />
+          </div>
+
           <div className="vest-copy">
             <p className="section-eyebrow">
               OFFICIAL FESTIVAL VEST
             </p>
+
+            <div className="vest-promo">
+              <strong>🔥 LIMITED-TIME OFFER</strong>
+
+              <div className="vest-promo-timer-label">
+                PROMO ENDS IN
+              </div>
+
+              <div className="vest-promo-timer">
+                <span>
+                  {String(hours).padStart(2, "0")}
+                </span>
+                <b>:</b>
+                <span>
+                  {String(minutes).padStart(2, "0")}
+                </span>
+                <b>:</b>
+                <span>
+                  {String(seconds).padStart(2, "0")}
+                </span>
+              </div>
+
+              <small>
+                HURRY — SECURE YOUR OFFICIAL FESTIVAL
+                VEST AT THE PROMOTIONAL PRICE.
+              </small>
+            </div>
 
             <h2>
               WEAR THE
@@ -105,14 +152,23 @@ function VestSection({ festival }) {
             </h2>
 
             <p>
-             Get your official {festival.name} vest
-             and be part of the movement.
+              Get your official {festival.name} vest
+              and be part of the movement.
             </p>
 
             <div className="vest-price">
-             <span>₦{vestPrice.toLocaleString()}</span>
+              <span>
+                ₦{vestPrice.toLocaleString()}
+              </span>
+
+              <del>₦12,000</del>
+
               <small>PER VEST</small>
             </div>
+
+            <p className="vest-savings">
+              SAVE ₦2,000
+            </p>
 
             <p className="vest-note">
               Payment and collection details will be handled

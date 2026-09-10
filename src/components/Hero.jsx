@@ -20,13 +20,16 @@ function Hero({ festival }) {
           {festival.event_date} • {festival.start_time}
         </p>
 
-        <p className="hero-location">
-          {festival.venue} • {festival.city}
-        </p>
+       <p className="hero-location">
+          {festival.venue}
+
+           <br />
+           {festival.address}
+          </p>
 
         <div className="hero-actions">
           <a href="#register" className="btn btn-primary">
-            REGISTER FREE
+            REGISTER FOR FREE
           </a>
 
           <a href="#vest" className="btn btn-secondary">

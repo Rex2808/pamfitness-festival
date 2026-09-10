@@ -1,6 +1,31 @@
-function VendorDetails({ vendor, onClose }) {
+import { useState } from "react";
+import { updateVendorStatus } from "../../services/adminService";
+
+function VendorDetails({ vendor, onClose, onUpdated }) {
+  const [updating, setUpdating] = useState(false);
+  const [updateError, setUpdateError] = useState("");
+
   if (!vendor) {
     return null;
+  }
+
+  async function handleStatusUpdate(status) {
+    try {
+      setUpdating(true);
+      setUpdateError("");
+
+      const updatedVendor = await updateVendorStatus(
+  vendor.id,
+  status
+);
+
+onUpdated(updatedVendor);
+onClose();
+    } catch (err) {
+      setUpdateError(err.message);
+    } finally {
+      setUpdating(false);
+    }
   }
 
   return (
@@ -105,9 +130,46 @@ function VendorDetails({ vendor, onClose }) {
 
               <div className="admin-detail-item">
                 <span>Status</span>
+
                 <strong>
                   {vendor.status || "—"}
                 </strong>
+
+                <div className="admin-status-actions">
+                  <button
+                    type="button"
+                    disabled={updating}
+                    onClick={() =>
+                      handleStatusUpdate("PENDING")
+                    }
+                  >
+                    Pending
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={updating}
+                    onClick={() =>
+                      handleStatusUpdate("APPROVED")
+                    }
+                  >
+                    Approve
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={updating}
+                    onClick={() =>
+                      handleStatusUpdate("REJECTED")
+                    }
+                  >
+                    Reject
+                  </button>
+                </div>
+
+                {updateError && (
+                  <p>{updateError}</p>
+                )}
               </div>
 
               <div className="admin-detail-item">
@@ -122,7 +184,10 @@ function VendorDetails({ vendor, onClose }) {
               </div>
             </div>
 
-            <div className="admin-detail-item" style={{ marginTop: "18px" }}>
+            <div
+              className="admin-detail-item"
+              style={{ marginTop: "18px" }}
+            >
               <span>Description</span>
               <strong>
                 {vendor.description || "—"}

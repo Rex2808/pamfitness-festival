@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getAdminAttendees } from "../../services/adminService";
+import {
+  getAdminAttendees,
+  checkInAttendee,
+  checkOutAttendee,
+} from "../../services/adminService";
 import DataTable from "../../components/admin/DataTable";
 import AttendeeDetails from "../../components/admin/AttendeeDetails";
 
@@ -9,6 +13,8 @@ function Attendees() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedAttendee, setSelectedAttendee] = useState(null);
+  const [updatingId, setUpdatingId] = useState(null);
+const [updateError, setUpdateError] = useState("");
 
   useEffect(() => {
     async function loadAttendees() {
@@ -24,6 +30,29 @@ function Attendees() {
 
     loadAttendees();
   }, []);
+
+  async function handleAttendanceToggle(attendee) {
+  try {
+    setUpdatingId(attendee.id);
+    setUpdateError("");
+
+    const updatedAttendee = attendee.attended
+      ? await checkOutAttendee(attendee.id)
+      : await checkInAttendee(attendee.id);
+
+    setAttendees((currentAttendees) =>
+      currentAttendees.map((currentAttendee) =>
+        currentAttendee.id === updatedAttendee.id
+          ? updatedAttendee
+          : currentAttendee
+      )
+    );
+  } catch (err) {
+    setUpdateError(err.message);
+  } finally {
+    setUpdatingId(null);
+  }
+}
 
   const filteredAttendees = attendees.filter((attendee) => {
   const searchTerm = search.toLowerCase();
@@ -59,12 +88,23 @@ const attendeeColumns = [
     render: (attendee) =>
       new Date(attendee.registered_at).toLocaleDateString(),
   },
-  {
-    key: "attended",
-    label: "Attendance",
-    render: (attendee) =>
-      attendee.attended ? "Attended" : "Not attended",
-  },
+ {
+  key: "attended",
+  label: "Attendance",
+  render: (attendee) => (
+    <button
+      type="button"
+      disabled={updatingId === attendee.id}
+      onClick={() => handleAttendanceToggle(attendee)}
+    >
+      {updatingId === attendee.id
+        ? "Updating..."
+        : attendee.attended
+        ? "Check Out"
+        : "Check In"}
+    </button>
+  ),
+},
 
     {
     key: "actions",
@@ -93,6 +133,10 @@ const attendeeColumns = [
     onChange={(event) => setSearch(event.target.value)}
   />
 </div>
+
+{updateError && (
+  <p>Attendance update failed: {updateError}</p>
+)}
 
       {loading && <p>Loading attendees...</p>}
 
