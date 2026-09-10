@@ -8,6 +8,7 @@ import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import Attendees from "./pages/admin/Attendees";
 import Vendors from "./pages/admin/Vendors";
+import VestOrders from "./pages/admin/VestOrders";
 
 function App() {
   return (
@@ -43,6 +44,17 @@ function App() {
     <ProtectedAdminRoute>
       <AdminLayout>
         <Vendors />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/vest-orders"
+  element={
+    <ProtectedAdminRoute>
+      <AdminLayout>
+        <VestOrders />
       </AdminLayout>
     </ProtectedAdminRoute>
   }
