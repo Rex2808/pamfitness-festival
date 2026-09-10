@@ -44,44 +44,39 @@ function Footer({ festival }) {
           </div>
 
           <div className="footer-contact">
-            <p className="footer-title">CONTACT</p>
+  <p className="footer-title">CONTACT</p>
 
-            <p>
-              14, Westend Hospital Road, Off Airport Road,
-              Bendel Estate, DDPA Ugborikoko, Effurun, Delta State
-            </p>
+  <p>
+    <strong>Pam Fitness Resources</strong><br />
+    <em>Yellow House</em><br />
+    14, Westend Hospital Road,<br />
+    Bendel Estate<br />
+    DDPA Housing Complex Ugborikoko Effurun<br />
+    Delta State
+  </p>
 
-            <a href="tel:080276645352">
-              080276645352
-            </a>
+  <p>
+    Email.<br />
+    <a href="mailto:pamfitnesscentre@gmail.com">
+      pamfitnesscentre@gmail.com
+    </a>
+  </p>
 
-            <a href="tel:08182066411">
-              08182066411
-            </a>
+  <a href="tel:08034551860">
+    08034551860
+  </a>
 
-            <a href="tel:08034551860">
-              08034551860
-            </a>
-
-            <a href="tel:07011780762">
-              07011780762
-            </a>
-
-            <a href="mailto:pamfitnesscentre@gmail.com">
-              pamfitnesscentre@gmail.com
-            </a>
-
-            <a
-              href={`https://wa.me/${festival.whatsapp}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              WhatsApp:{" "}
-              {festival.whatsapp.startsWith("234")
-                ? `0${festival.whatsapp.slice(3)}`
-                : festival.whatsapp}
-            </a>
-          </div>
+  <a
+    href={`https://wa.me/${festival.whatsapp}`}
+    target="_blank"
+    rel="noreferrer"
+  >
+    WhatsApp:{" "}
+    {festival.whatsapp.startsWith("234")
+      ? `0${festival.whatsapp.slice(3)}`
+      : festival.whatsapp}
+  </a>
+</div>
 
         </div>
 

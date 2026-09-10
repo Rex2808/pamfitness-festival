@@ -56,7 +56,7 @@ function ContactSection({ festival }) {
 
             <h3>{festival.venue}</h3>
 
-            <p>{festival.address}</p>
+          
           </div>
 
           <div className="contact-details">
