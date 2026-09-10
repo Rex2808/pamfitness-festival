@@ -6,6 +6,7 @@ import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
 import AdminLayout from "./layouts/AdminLayout";
+import Attendees from "./pages/admin/Attendees";
 
 function App() {
   return (
@@ -20,6 +21,16 @@ function App() {
     <ProtectedAdminRoute>
       <AdminLayout>
         <Dashboard />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
+<Route
+  path="/admin/attendees"
+  element={
+    <ProtectedAdminRoute>
+      <AdminLayout>
+        <Attendees />
       </AdminLayout>
     </ProtectedAdminRoute>
   }
