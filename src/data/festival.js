@@ -9,7 +9,7 @@ export const festival = {
 
   venue: "MONARCHY EPIC ARENA",
 
-  address: "EFFURUN ROAD, SAPELE",
+  address:  "EFFURUN SAPELE ROAD, EFFURUN DELTA STATE",
 
   city: "",
 
