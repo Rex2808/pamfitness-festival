@@ -88,6 +88,12 @@ function VestSection({ festival }) {
     <section className="vest-section" id="vest">
       <div className="section-container">
         <div className="vest-content">
+          <div className="vest-visual">
+  <img
+    src="/images/pamfitness-vests-3d.png"
+    alt="PAMFITNESS Festival official vest designs"
+  />
+</div>
           <div className="vest-copy">
             <p className="section-eyebrow">
               OFFICIAL FESTIVAL VEST

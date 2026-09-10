@@ -115,7 +115,7 @@ function RegistrationSection({ festival }) {
     <section className="registration-section" id="register">
       <div className="section-container">
         <div className="registration-header">
-          <p className="section-eyebrow">OPTIONAL REGISTRATION</p>
+          <p className="section-eyebrow">COMPULSORY REGISTRATION</p>
 
           <h2>
             JOIN THE
@@ -123,9 +123,9 @@ function RegistrationSection({ festival }) {
           </h2>
 
           <p>
-            Entry is completely FREE and registration is optional.
-            Register to receive festival updates and stay connected
-            with the PAMFITNESS community.
+           Entry is completely FREE, but registration is compulsory.
+           Register to receive festival updates and stay connected
+           with the PAMFITNESS community.
           </p>
         </div>
 
@@ -280,6 +280,8 @@ function RegistrationSection({ festival }) {
               <option value="Facebook">Facebook</option>
               <option value="TikTok">TikTok</option>
               <option value="WhatsApp">WhatsApp</option>
+              <option value="YouTube">YouTube</option>
+              <option value="Google">Google</option>
               <option value="Friend">Friend / Family</option>
               <option value="Gym">PAMFITNESS Gym</option>
               <option value="Other">Other</option>

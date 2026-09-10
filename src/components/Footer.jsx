@@ -3,6 +3,7 @@ function Footer({ festival }) {
     <footer className="footer">
       <div className="section-container">
         <div className="footer-grid">
+
           <div className="footer-brand">
             <img
               src="/images/pamfitness-logo.jpg"
@@ -45,8 +46,19 @@ function Footer({ festival }) {
           <div className="footer-contact">
             <p className="footer-title">CONTACT</p>
 
-            <p>{festival.venue}</p>
-            <p>{festival.address}</p>
+            <p>EFFURUN SAPELE ROAD, EFFURUN DELTA STATE</p>
+
+            <a href="tel:08185244131">
+              08185244131
+            </a>
+
+            <a href="tel:08161228803">
+              08161228803
+            </a>
+
+            <a href="tel:08027645352">
+              08027645352
+            </a>
 
             <a
               href={`https://wa.me/${festival.whatsapp}`}
@@ -59,21 +71,22 @@ function Footer({ festival }) {
                 : festival.whatsapp}
             </a>
           </div>
+
         </div>
 
-       <div className="footer-bottom">
-  <p>
-    © {festival.year} {festival.name}. All rights reserved.
-  </p>
+        <div className="footer-bottom">
+          <p>
+            © {festival.year} PAMFITNESS FESTIVAL. All rights reserved.
+          </p>
 
-  <p>
-    BODY • MIND • SOUL
-  </p>
+          <p>
+            BODY • MIND • SOUL
+          </p>
 
-  <p className="footer-powered">
-    POWERED BY <strong>TrakLabs</strong>
-  </p>
-</div>
+          <p className="footer-powered">
+            POWERED BY <strong>TrakLabs</strong>
+          </p>
+        </div>
       </div>
     </footer>
   );

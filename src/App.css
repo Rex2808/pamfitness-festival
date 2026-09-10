@@ -1066,9 +1066,26 @@ a {
 
 .vest-content {
   display: grid;
-  grid-template-columns: 1fr 0.85fr;
-  gap: 80px;
+  grid-template-columns: 1.05fr 0.85fr;
+  gap: 70px;
   align-items: center;
+}
+
+.vest-visual {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vest-visual img {
+  width: 100%;
+  max-width: 680px;
+  height: auto;
+  display: block;
+  border-radius: 24px;
+  object-fit: contain;
+  filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.35));
 }
 
 .vest-copy {
@@ -1181,11 +1198,23 @@ a {
     gap: 50px;
   }
 
+  .vest-visual {
+    order: 1;
+  }
+
   .vest-copy {
     max-width: 760px;
+    order: 2;
+  }
+
+  .vest-form {
+    order: 3;
+  }
+
+  .vest-visual img {
+    max-width: 620px;
   }
 }
-
 @media (max-width: 768px) {
   .vest-section {
     padding: 80px 0;
