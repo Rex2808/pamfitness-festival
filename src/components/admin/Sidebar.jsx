@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
+import { getCurrentAdminProfile } from "../../services/adminService";
 
 import {
   LayoutDashboard,
@@ -16,92 +18,141 @@ import {
 } from "lucide-react";
 
 function Sidebar() {
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    async function loadAdminProfile() {
+      try {
+        const profile = await getCurrentAdminProfile();
+
+        if (profile) {
+          setRole(profile.role);
+        }
+      } catch (error) {
+        console.error(
+          "Unable to load admin profile:",
+          error
+        );
+      }
+    }
+
+    loadAdminProfile();
+  }, []);
+
+  const isPlatformAdmin =
+    role === "PLATFORM_ADMIN";
+
+  const isFestivalAdmin =
+    role === "FESTIVAL_ADMIN";
+
+  const isStaff = role === "STAFF";
+
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-brand">
         <h2>TrakLabs</h2>
-        <span>Festival Admin</span>
+        <span>
+          {isPlatformAdmin
+            ? "Platform Admin"
+            : isStaff
+              ? "Festival Staff"
+              : "Festival Admin"}
+        </span>
       </div>
 
       <nav className="admin-sidebar-nav">
         <div className="admin-nav-section">
-          <span className="admin-nav-label">MAIN</span>
+          <span className="admin-nav-label">
+            MAIN
+          </span>
 
-         <NavLink
-           to="/admin"
-           end
-         >
-         <LayoutDashboard size={18} />
-         <span>Dashboard</span>
-         </NavLink>
+          <NavLink
+            to="/admin"
+            end
+          >
+            <LayoutDashboard size={18} />
+            <span>Dashboard</span>
+          </NavLink>
         </div>
 
+        {(isPlatformAdmin ||
+          isFestivalAdmin) && (
+          <div className="admin-nav-section">
+            <span className="admin-nav-label">
+              FESTIVAL
+            </span>
+
+            <NavLink to="/admin/settings">
+              <Settings size={18} />
+              <span>Settings</span>
+            </NavLink>
+
+            <NavLink to="/admin/activities">
+              <Dumbbell size={18} />
+              <span>Activities</span>
+            </NavLink>
+
+            <NavLink to="/admin/gallery">
+              <Image size={18} />
+              <span>Gallery</span>
+            </NavLink>
+
+            <NavLink to="/admin/faqs">
+              <HelpCircle size={18} />
+              <span>FAQs</span>
+            </NavLink>
+
+            {isPlatformAdmin && (
+              <NavLink to="/admin/admins">
+                <UserCog size={18} />
+                <span>Admins & Staff</span>
+              </NavLink>
+            )}
+          </div>
+        )}
+
         <div className="admin-nav-section">
-          <span className="admin-nav-label">FESTIVAL</span>
-
-          <NavLink to="/admin/settings">
-  <Settings size={18} />
-  <span>Settings</span>
-</NavLink>
-
-<NavLink to="/admin/activities">
-  <Dumbbell size={18} />
-  <span>Activities</span>
-</NavLink>
-
-<NavLink to="/admin/gallery">
-  <Image size={18} />
-  <span>Gallery</span>
-</NavLink>
-
-<NavLink to="/admin/faqs">
-  <HelpCircle size={18} />
-  <span>FAQs</span>
-</NavLink>
-
-<NavLink to="/admin/admins">
-  <UserCog size={18} />
-  <span>Admins & Staff</span>
-</NavLink>
-        </div>
-
-        <div className="admin-nav-section">
-          <span className="admin-nav-label">MANAGEMENT</span>
+          <span className="admin-nav-label">
+            MANAGEMENT
+          </span>
 
           <NavLink to="/admin/attendees">
-  <Users size={18} />
-  <span>Attendees</span>
-</NavLink>
+            <Users size={18} />
+            <span>Attendees</span>
+          </NavLink>
 
-<NavLink to="/admin/vendors">
-  <Store size={18} />
-  <span>Vendors</span>
-</NavLink>
+          <NavLink to="/admin/vendors">
+            <Store size={18} />
+            <span>Vendors</span>
+          </NavLink>
 
-<NavLink to="/admin/vest-orders">
-  <Shirt size={18} />
-  <span>Vest Orders</span>
-</NavLink>
+          <NavLink to="/admin/vest-orders">
+            <Shirt size={18} />
+            <span>Vest Orders</span>
+          </NavLink>
 
-<NavLink to="/admin/reports">
-  <BarChart3 size={18} />
-  <span>Reports</span>
-</NavLink>
+          {!isStaff && (
+            <NavLink to="/admin/reports">
+              <BarChart3 size={18} />
+              <span>Reports</span>
+            </NavLink>
+          )}
         </div>
       </nav>
 
-     <div className="admin-sidebar-footer">
-  <button
-    type="button"
-    onClick={async () => {
-      await supabase.auth.signOut();
-      window.location.href = "/admin/login";
-    }}
-  >
-    <LogOut size={18} />
-    <span>Logout</span>
-  </button>
-</div>
+      <div className="admin-sidebar-footer">
+        <button
+          type="button"
+          onClick={async () => {
+            await supabase.auth.signOut();
+            window.location.href =
+              "/admin/login";
+          }}
+        >
+          <LogOut size={18} />
+          <span>Logout</span>
+        </button>
+      </div>
     </aside>
   );
 }

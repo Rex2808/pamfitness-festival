@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 
-function ProtectedAdminRoute({ children }) {
+function ProtectedAdminRoute({
+  children,
+  allowedRoles,
+}) {
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
 
@@ -24,21 +27,32 @@ function ProtectedAdminRoute({ children }) {
         .single();
 
       if (!error && data) {
-        setAuthorized(true);
+        const hasRoleAccess =
+          !allowedRoles ||
+          allowedRoles.includes(data.role);
+
+        if (hasRoleAccess) {
+          setAuthorized(true);
+        }
       }
 
       setLoading(false);
     }
 
     checkAuthorization();
-  }, []);
+  }, [allowedRoles]);
 
   if (loading) {
     return <div>Checking admin access...</div>;
   }
 
   if (!authorized) {
-    return <Navigate to="/admin/login" replace />;
+    return (
+      <Navigate
+        to="/admin"
+        replace
+      />
+    );
   }
 
   return children;

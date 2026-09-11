@@ -351,3 +351,29 @@ export async function getAdminFestivals() {
 
   return data;
 }
+export async function getCurrentAdminProfile() {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    throw userError;
+  }
+
+  if (!user) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("admin_users")
+    .select("id, role, festival_id")
+    .eq("user_id", user.id)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
