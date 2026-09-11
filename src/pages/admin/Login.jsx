@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabase";
 
 function Login() {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -15,58 +16,114 @@ function Login() {
     setSubmitting(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({
-  email,
-  password,
-});
+    const { error } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-if (error) {
-  setError(error.message);
-  setSubmitting(false);
-  return;
-}
+    if (error) {
+      setError(error.message);
+      setSubmitting(false);
+      return;
+    }
 
-setSubmitting(false);
-navigate("/admin");
+    setSubmitting(false);
+    navigate("/admin");
   }
 
   return (
-    <main>
-      <h1>TrakLabs Admin Login</h1>
+    <main className="admin-login-page">
+      <div className="admin-login-card">
+        <div className="admin-login-brand">
+          <div className="admin-login-mark">
+            TL
+          </div>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
+          <div>
+            <p className="admin-login-brand-name">
+              TrakLabs
+            </p>
 
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
+            <p className="admin-login-brand-subtitle">
+              FESTIVAL MANAGEMENT
+            </p>
+          </div>
         </div>
 
-        <div>
-          <label htmlFor="password">Password</label>
+        <div className="admin-login-header">
+          <p className="admin-login-eyebrow">
+            PAMFITNESS FESTIVAL 2026
+          </p>
 
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) =>
-              setPassword(event.target.value)
-            }
-            required
-          />
+          <h1>Admin Portal</h1>
+
+          <p>
+            Sign in to manage your festival.
+          </p>
         </div>
 
-        {error && <p>{error}</p>}
+        <form
+          onSubmit={handleSubmit}
+          className="admin-login-form"
+        >
+          <div className="admin-login-field">
+            <label htmlFor="email">
+              Email Address
+            </label>
 
-        <button type="submit" disabled={submitting}>
-          {submitting ? "SIGNING IN..." : "SIGN IN"}
-        </button>
-      </form>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
+              placeholder="admin@example.com"
+              autoComplete="email"
+              required
+            />
+          </div>
+
+          <div className="admin-login-field">
+            <label htmlFor="password">
+              Password
+            </label>
+
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) =>
+                setPassword(event.target.value)
+              }
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              required
+            />
+          </div>
+
+          {error && (
+            <div className="admin-login-error">
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className="admin-login-button"
+            disabled={submitting}
+          >
+            {submitting
+              ? "SIGNING IN..."
+              : "SIGN IN"}
+          </button>
+        </form>
+
+        <div className="admin-login-footer">
+          POWERED BY <strong>TrakLabs</strong>
+        </div>
+      </div>
     </main>
   );
 }
