@@ -311,3 +311,125 @@ create trigger set_vendor_order_defaults
 before insert on public.vendors
 for each row
 execute function public.set_vendor_order_defaults();
+
+-- =========================================================
+-- ADMIN USERS & FESTIVAL AUTHORIZATION
+-- =========================================================
+
+create table public.admin_users (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null unique references auth.users(id) on delete cascade,
+  role text not null default 'FESTIVAL_ADMIN'
+    check (
+      role in (
+        'PLATFORM_ADMIN',
+        'FESTIVAL_ADMIN',
+        'STAFF'
+      )
+    ),
+  festival_id uuid references public.festivals(id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+
+alter table public.admin_users enable row level security;
+
+
+-- =========================================================
+-- ADMIN USER ACCESS
+-- =========================================================
+
+create policy "Admins can view their own admin profile"
+on public.admin_users
+for select
+to authenticated
+using (
+  user_id = auth.uid()
+);
+
+
+-- =========================================================
+-- ADMIN AUTHORIZATION HELPERS
+-- =========================================================
+
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.admin_users
+    where user_id = auth.uid()
+  );
+$$;
+
+
+create or replace function public.is_platform_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.admin_users
+    where user_id = auth.uid()
+      and role = 'PLATFORM_ADMIN'
+  );
+$$;
+
+
+create or replace function public.is_festival_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.admin_users
+    where user_id = auth.uid()
+      and role = 'FESTIVAL_ADMIN'
+      and festival_id is not null
+  );
+$$;
+
+
+create or replace function public.is_staff()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.admin_users
+    where user_id = auth.uid()
+      and role = 'STAFF'
+      and festival_id is not null
+  );
+$$;
+
+
+create or replace function public.can_manage_festival(
+  target_festival_id uuid
+)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.admin_users
+    where user_id = auth.uid()
+      and (
+        role = 'PLATFORM_ADMIN'
+        or (
+          role in ('FESTIVAL_ADMIN', 'STAFF')
+          and festival_id = target_festival_id
+        )
+      )
+  );
+$$;

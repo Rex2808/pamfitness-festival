@@ -11,6 +11,11 @@ import Vendors from "./pages/admin/Vendors";
 import VestOrders from "./pages/admin/VestOrders";
 import Settings from "./pages/admin/Settings";
 import Activities from "./pages/admin/Activities";
+import Gallery from "./pages/admin/Gallery";
+import Faqs from "./pages/admin/Faqs";
+import Reports from "./pages/admin/Reports";
+import Admins from "./pages/admin/Admins";
+import InviteSetup from "./pages/admin/InviteSetup";
 
 function App() {
   return (
@@ -82,6 +87,55 @@ function App() {
       </AdminLayout>
     </ProtectedAdminRoute>
   }
+/>
+
+<Route
+  path="/admin/gallery"
+  element={
+    <ProtectedAdminRoute>
+      <AdminLayout>
+        <Gallery />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/faqs"
+  element={
+    <ProtectedAdminRoute>
+      <AdminLayout>
+        <Faqs />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/reports"
+  element={
+    <ProtectedAdminRoute>
+      <AdminLayout>
+        <Reports />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/admins"
+  element={
+    <ProtectedAdminRoute>
+      <AdminLayout>
+        <Admins />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/setup"
+  element={<InviteSetup />}
 />
     </Routes>
   );

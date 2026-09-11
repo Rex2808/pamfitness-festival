@@ -238,44 +238,56 @@ function Activities() {
 
   return (
     <div>
-      <h1>Activities</h1>
+      <div className="admin-page-header">
+        <div>
+          <span className="admin-topbar-label">
+            FESTIVAL CONTENT
+          </span>
 
-      <p>
-        Manage the activities displayed on the
-        festival website.
-      </p>
+          <h1>Activities</h1>
 
-      <div>
-        <p>
-          Total activities: {activities.length}
-        </p>
+          <p>
+            Manage the activities displayed on the
+            festival website.
+          </p>
+        </div>
 
-        <button
-          type="button"
-          onClick={openAddForm}
-        >
-          Add Activity
-        </button>
+        <div className="admin-page-actions">
+          <button
+            type="button"
+            className="admin-primary-button"
+            onClick={openAddForm}
+          >
+            + Add Activity
+          </button>
+        </div>
       </div>
 
-      {success && <p>{success}</p>}
+      {success && (
+        <div className="admin-message">
+          {success}
+        </div>
+      )}
 
       {error && (
-        <p>
+        <div className="admin-message">
           Failed to process activity: {error}
-        </p>
+        </div>
       )}
 
       {showForm && (
-        <form onSubmit={handleSubmit}>
-          <section>
-            <h2>
-              {editingActivity
-                ? "Edit Activity"
-                : "Add Activity"}
-            </h2>
+        <form
+          className="admin-form"
+          onSubmit={handleSubmit}
+        >
+          <h2>
+            {editingActivity
+              ? "Edit Activity"
+              : "Add Activity"}
+          </h2>
 
-            <div>
+          <div className="admin-form-grid">
+            <div className="admin-form-field">
               <label htmlFor="name">
                 Activity Name
               </label>
@@ -290,7 +302,7 @@ function Activities() {
               />
             </div>
 
-            <div>
+            <div className="admin-form-field">
               <label htmlFor="description">
                 Description
               </label>
@@ -304,22 +316,21 @@ function Activities() {
               />
             </div>
 
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  name="is_visible"
-                  checked={form.is_visible}
-                  onChange={handleChange}
-                />
+            <label className="admin-checkbox-field">
+              <input
+                type="checkbox"
+                name="is_visible"
+                checked={form.is_visible}
+                onChange={handleChange}
+              />
 
-                Visible on public website
-              </label>
-            </div>
+              Visible on public website
+            </label>
 
-            <div>
+            <div className="admin-form-actions">
               <button
                 type="submit"
+                className="admin-primary-button"
                 disabled={saving}
               >
                 {saving
@@ -331,55 +342,70 @@ function Activities() {
 
               <button
                 type="button"
+                className="admin-secondary-button"
                 onClick={closeForm}
                 disabled={saving}
               >
                 Cancel
               </button>
             </div>
-          </section>
+          </div>
         </form>
       )}
 
-      <div>
-        {activities.map((activity) => (
-          <div key={activity.id}>
-            <h2>{activity.name}</h2>
-
-            <p>
-              {activity.description || "—"}
-            </p>
-
-            <p>
-              Status:{" "}
-              {activity.is_visible
-                ? "Visible"
-                : "Hidden"}
-            </p>
-
-            <div>
-              <button
-                type="button"
-                onClick={() =>
-                  openEditForm(activity)
-                }
-              >
-                Edit
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  handleToggleVisibility(activity)
-                }
-              >
-                {activity.is_visible
-                  ? "Hide"
-                  : "Show"}
-              </button>
-            </div>
+      <div className="admin-activity-list">
+        {activities.length === 0 ? (
+          <div className="admin-message">
+            No activities found.
           </div>
-        ))}
+        ) : (
+          activities.map((activity) => (
+            <div
+              className="admin-activity-card"
+              key={activity.id}
+            >
+              <div className="admin-activity-card-header">
+                <div>
+                  <h2>{activity.name}</h2>
+
+                  <p>
+                    {activity.description || "—"}
+                  </p>
+                </div>
+
+                <span className="admin-activity-status">
+                  {activity.is_visible
+                    ? "Visible"
+                    : "Hidden"}
+                </span>
+              </div>
+
+              <div className="admin-activity-actions">
+                <button
+                  type="button"
+                  className="admin-secondary-button"
+                  onClick={() =>
+                    openEditForm(activity)
+                  }
+                >
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  className="admin-secondary-button"
+                  onClick={() =>
+                    handleToggleVisibility(activity)
+                  }
+                >
+                  {activity.is_visible
+                    ? "Hide"
+                    : "Show"}
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

@@ -1,3 +1,6 @@
+import { NavLink } from "react-router-dom";
+import { supabase } from "../../lib/supabase";
+
 import {
   LayoutDashboard,
   Users,
@@ -8,6 +11,7 @@ import {
   Dumbbell,
   HelpCircle,
   BarChart3,
+  UserCog,
   LogOut,
 } from "lucide-react";
 
@@ -23,67 +27,81 @@ function Sidebar() {
         <div className="admin-nav-section">
           <span className="admin-nav-label">MAIN</span>
 
-          <a href="/admin">
-            <LayoutDashboard size={18} />
-            <span>Dashboard</span>
-          </a>
+         <NavLink
+           to="/admin"
+           end
+         >
+         <LayoutDashboard size={18} />
+         <span>Dashboard</span>
+         </NavLink>
         </div>
 
         <div className="admin-nav-section">
           <span className="admin-nav-label">FESTIVAL</span>
 
-          <a href="/admin/settings">
-            <Settings size={18} />
-            <span>Settings</span>
-          </a>
+          <NavLink to="/admin/settings">
+  <Settings size={18} />
+  <span>Settings</span>
+</NavLink>
 
-          <a href="/admin/activities">
-            <Dumbbell size={18} />
-            <span>Activities</span>
-          </a>
+<NavLink to="/admin/activities">
+  <Dumbbell size={18} />
+  <span>Activities</span>
+</NavLink>
 
-          <a href="/admin/gallery">
-            <Image size={18} />
-            <span>Gallery</span>
-          </a>
+<NavLink to="/admin/gallery">
+  <Image size={18} />
+  <span>Gallery</span>
+</NavLink>
 
-          <a href="/admin/faqs">
-            <HelpCircle size={18} />
-            <span>FAQs</span>
-          </a>
+<NavLink to="/admin/faqs">
+  <HelpCircle size={18} />
+  <span>FAQs</span>
+</NavLink>
+
+<NavLink to="/admin/admins">
+  <UserCog size={18} />
+  <span>Admins & Staff</span>
+</NavLink>
         </div>
 
         <div className="admin-nav-section">
           <span className="admin-nav-label">MANAGEMENT</span>
 
-          <a href="/admin/attendees">
-            <Users size={18} />
-            <span>Attendees</span>
-          </a>
+          <NavLink to="/admin/attendees">
+  <Users size={18} />
+  <span>Attendees</span>
+</NavLink>
 
-          <a href="/admin/vendors">
-            <Store size={18} />
-            <span>Vendors</span>
-          </a>
+<NavLink to="/admin/vendors">
+  <Store size={18} />
+  <span>Vendors</span>
+</NavLink>
 
-          <a href="/admin/vest-orders">
-            <Shirt size={18} />
-            <span>Vest Orders</span>
-          </a>
+<NavLink to="/admin/vest-orders">
+  <Shirt size={18} />
+  <span>Vest Orders</span>
+</NavLink>
 
-          <a href="/admin/reports">
-            <BarChart3 size={18} />
-            <span>Reports</span>
-          </a>
+<NavLink to="/admin/reports">
+  <BarChart3 size={18} />
+  <span>Reports</span>
+</NavLink>
         </div>
       </nav>
 
-      <div className="admin-sidebar-footer">
-        <button type="button">
-          <LogOut size={18} />
-          <span>Logout</span>
-        </button>
-      </div>
+     <div className="admin-sidebar-footer">
+  <button
+    type="button"
+    onClick={async () => {
+      await supabase.auth.signOut();
+      window.location.href = "/admin/login";
+    }}
+  >
+    <LogOut size={18} />
+    <span>Logout</span>
+  </button>
+</div>
     </aside>
   );
 }
