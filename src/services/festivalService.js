@@ -5,11 +5,10 @@ export async function getActiveFestival() {
     .from("festivals")
     .select("*")
     .eq("is_active", true)
+    .eq("is_current", true)
     .single();
 
-  if (error) {
-    throw new Error(error.message);
-  }
+  if (error) throw new Error(error.message);
 
   return data;
 }
