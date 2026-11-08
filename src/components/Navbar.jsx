@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 
 function Navbar({ festival }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const isOpen = festival?.status === "OPEN";
 
   function closeMenu() {
     setMenuOpen(false);
@@ -38,13 +40,15 @@ function Navbar({ festival }) {
             Contact
           </a>
 
-          <a
-            href="#register"
-            className="navbar-cta"
-            onClick={closeMenu}
-          >
-            REGISTER FOR FREE
-          </a>
+          {isOpen && (
+            <a
+              href="#register"
+              className="navbar-cta"
+              onClick={closeMenu}
+            >
+              REGISTER FOR FREE
+            </a>
+          )}
         </nav>
 
         <button

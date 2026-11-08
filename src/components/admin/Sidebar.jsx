@@ -15,6 +15,7 @@ import {
   BarChart3,
   UserCog,
   LogOut,
+  CalendarRange,
 } from "lucide-react";
 
 function Sidebar() {
@@ -74,6 +75,13 @@ function Sidebar() {
             <span>Dashboard</span>
           </NavLink>
         </div>
+
+        {isPlatformAdmin && (
+  <NavLink to="/admin/festivals">
+    <CalendarRange size={18} />
+    <span>Festival Management</span>
+  </NavLink>
+)}
 
         {(isPlatformAdmin ||
           isFestivalAdmin) && (

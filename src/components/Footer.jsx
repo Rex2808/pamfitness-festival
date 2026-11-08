@@ -1,9 +1,15 @@
+
 function Footer({ festival }) {
+  const isOpen = festival?.status === "OPEN";
+
+  const displayPhone = festival.whatsapp.startsWith("234")
+    ? `0${festival.whatsapp.slice(3)}`
+    : festival.whatsapp;
+
   return (
     <footer className="footer">
       <div className="section-container">
         <div className="footer-grid">
-
           <div className="footer-brand">
             <img
               src="/images/pamfitness-logo.jpg"
@@ -35,49 +41,51 @@ function Footer({ festival }) {
             <a href="#contact">Contact</a>
           </div>
 
-          <div className="footer-links">
-            <p className="footer-title">JOIN</p>
+          {isOpen && (
+            <div className="footer-links">
+              <p className="footer-title">JOIN</p>
 
-            <a href="#register">Register For Free</a>
-            <a href="#vest">Get Your Vest</a>
-            <a href="#vendors">Become a Vendor</a>
-          </div>
+              <a href="#register">Register For Free</a>
+              <a href="#vest">Get Your Vest</a>
+              <a href="#vendors">Become a Vendor</a>
+            </div>
+          )}
 
           <div className="footer-contact">
-  <p className="footer-title">CONTACT</p>
+            <p className="footer-title">CONTACT</p>
 
-  <p>
-    <strong>Pam Fitness Resources</strong><br />
-    <em>Yellow House</em><br />
-    14, Westend Hospital Road,<br />
-    Bendel Estate<br />
-    DDPA Housing Complex Ugborikoko Effurun<br />
-    Delta State
-  </p>
+            <p>
+              <strong>Pam Fitness Resources</strong>
+              <br />
+              <em>Yellow House</em>
+              <br />
+              14, Westend Hospital Road,
+              <br />
+              Bendel Estate
+              <br />
+              DDPA Housing Complex Ugborikoko Effurun
+              <br />
+              Delta State
+            </p>
 
-  <p>
-    Email.<br />
-    <a href="mailto:pamfitnesscentre@gmail.com">
-      pamfitnesscentre@gmail.com
-    </a>
-  </p>
+            <p>
+              Email.
+              <br />
+              <a href="mailto:pamfitnesscentre@gmail.com">
+                pamfitnesscentre@gmail.com
+              </a>
+            </p>
 
-  <a href="tel:08034551860">
-    08034551860
-  </a>
+            <a href="tel:08034551860">08034551860</a>
 
-  <a
-    href={`https://wa.me/${festival.whatsapp}`}
-    target="_blank"
-    rel="noreferrer"
-  >
-    WhatsApp:{" "}
-    {festival.whatsapp.startsWith("234")
-      ? `0${festival.whatsapp.slice(3)}`
-      : festival.whatsapp}
-  </a>
-</div>
-
+            <a
+              href={`https://wa.me/${festival.whatsapp}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              WhatsApp: {displayPhone}
+            </a>
+          </div>
         </div>
 
         <div className="footer-bottom">
@@ -85,9 +93,7 @@ function Footer({ festival }) {
             © {festival.year} PAMFITNESS FESTIVAL. All rights reserved.
           </p>
 
-          <p>
-            BODY • MIND • SOUL
-          </p>
+          <p>BODY • MIND • SOUL</p>
 
           <p className="footer-powered">
             POWERED BY <strong>TrakLabs</strong>

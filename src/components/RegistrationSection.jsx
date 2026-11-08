@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { registerAttendee } from "../services/attendeeService";
 
@@ -17,13 +18,15 @@ function RegistrationSection({ festival }) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  const isOpen = festival?.status === "OPEN";
+
   useEffect(() => {
-  if (success) {
-    document
-      .getElementById("register")
-      ?.scrollIntoView({ behavior: "smooth" });
-  }
-}, [success]);
+    if (success) {
+      document
+        .getElementById("register")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [success]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -77,6 +80,33 @@ function RegistrationSection({ festival }) {
     }
   }
 
+  if (!isOpen) {
+    return (
+      <section className="registration-section" id="register">
+        <div className="section-container">
+          <div className="registration-success">
+            <p className="section-eyebrow">FESTIVAL ARCHIVE</p>
+
+            <h2>
+              REGISTRATION
+              <span> CLOSED.</span>
+            </h2>
+
+            <p>
+              Registration for {festival.name} has ended.
+            </p>
+
+            <p>
+              Thank you to everyone who registered and supported
+              PAMFITNESS FESTIVAL. Stay connected for announcements
+              about our next edition.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (success) {
     return (
       <section className="registration-section" id="register">
@@ -115,7 +145,7 @@ function RegistrationSection({ festival }) {
     <section className="registration-section" id="register">
       <div className="section-container">
         <div className="registration-header">
-          <p className="section-eyebrow">COMPULSORY REGISTRATION</p>
+          <p className="section-eyebrow">FREE FESTIVAL REGISTRATION</p>
 
           <h2>
             JOIN THE
@@ -123,19 +153,16 @@ function RegistrationSection({ festival }) {
           </h2>
 
           <p>
-           Entry is completely FREE, but registration is compulsory.
-           Register to receive festival updates and stay connected
-           with the PAMFITNESS community.
+            Entry is completely FREE. Registration is optional and
+            helps us keep you informed about festival updates and
+            future PAMFITNESS events.
           </p>
         </div>
 
         <form className="registration-form" onSubmit={handleSubmit}>
           <div className="form-grid">
             <div className="form-field">
-              <label htmlFor="first_name">
-                First Name *
-              </label>
-
+              <label htmlFor="first_name">First Name *</label>
               <input
                 id="first_name"
                 name="first_name"
@@ -148,10 +175,7 @@ function RegistrationSection({ festival }) {
             </div>
 
             <div className="form-field">
-              <label htmlFor="last_name">
-                Last Name *
-              </label>
-
+              <label htmlFor="last_name">Last Name *</label>
               <input
                 id="last_name"
                 name="last_name"
@@ -164,10 +188,7 @@ function RegistrationSection({ festival }) {
             </div>
 
             <div className="form-field">
-              <label htmlFor="phone">
-                Phone Number *
-              </label>
-
+              <label htmlFor="phone">Phone Number *</label>
               <input
                 id="phone"
                 name="phone"
@@ -180,10 +201,7 @@ function RegistrationSection({ festival }) {
             </div>
 
             <div className="form-field">
-              <label htmlFor="email">
-                Email Address
-              </label>
-
+              <label htmlFor="email">Email Address</label>
               <input
                 id="email"
                 name="email"
@@ -195,10 +213,7 @@ function RegistrationSection({ festival }) {
             </div>
 
             <div className="form-field">
-              <label htmlFor="age_range">
-                Age Range
-              </label>
-
+              <label htmlFor="age_range">Age Range</label>
               <select
                 id="age_range"
                 name="age_range"
@@ -216,17 +231,14 @@ function RegistrationSection({ festival }) {
             </div>
 
             <div className="form-field">
-              <label htmlFor="gender">
-                Gender
-              </label>
-
+              <label htmlFor="gender">Gender</label>
               <select
                 id="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
               >
-                
+                <option value="">Select gender</option>
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
                 <option value="Other">Other</option>
@@ -247,17 +259,13 @@ function RegistrationSection({ festival }) {
                 "Networking",
                 "Games",
               ].map((interest) => (
-                <label
-                  className="interest-option"
-                  key={interest}
-                >
+                <label className="interest-option" key={interest}>
                   <input
                     type="checkbox"
                     value={interest}
                     checked={formData.interests.includes(interest)}
                     onChange={handleInterestChange}
                   />
-
                   <span>{interest}</span>
                 </label>
               ))}
@@ -294,20 +302,14 @@ function RegistrationSection({ festival }) {
             and information.
           </p>
 
-          {error && (
-            <div className="form-error">
-              {error}
-            </div>
-          )}
+          {error && <div className="form-error">{error}</div>}
 
           <button
             type="submit"
             className="btn btn-primary registration-submit"
             disabled={submitting}
           >
-            {submitting
-              ? "SUBMITTING..."
-              : "REGISTER FOR FREE"}
+            {submitting ? "SUBMITTING..." : "REGISTER FOR FREE"}
           </button>
         </form>
       </div>

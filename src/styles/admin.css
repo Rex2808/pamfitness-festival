@@ -1266,3 +1266,34 @@
     font-size: 25px;
   }
 }
+
+/* Festival Management Actions */
+
+.admin-festival-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.admin-festival-actions button,
+.admin-festival-actions select {
+  padding: 8px 10px;
+  border: 1px solid #2c3038;
+  border-radius: 7px;
+  background: #101216;
+  color: #d7d9de;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.admin-festival-actions button:hover {
+  background: #1b1e24;
+  color: #ffffff;
+}
+
+.admin-festival-actions select:focus {
+  outline: none;
+  border-color: #555b66;
+}

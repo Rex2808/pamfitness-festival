@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+
+import { useState } from "react";
 import { createVestOrder } from "../services/vestService";
 
 function VestSection({ festival }) {
   const whatsappNumber = festival.whatsapp;
+  const vestPrice = Number(festival.vest_price);
+  const isOpen = festival?.status === "OPEN";
 
   const [formData, setFormData] = useState({
     first_name: "",
@@ -15,30 +18,8 @@ function VestSection({ festival }) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const [timeLeft, setTimeLeft] = useState(
-    24 * 60 * 60
-  );
-
-  const vestPrice = Number(festival.vest_price);
-
   const totalAmount =
     Number(formData.quantity) * vestPrice;
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((previousTime) =>
-        previousTime <= 1
-          ? 24 * 60 * 60
-          : previousTime - 1
-      );
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const hours = Math.floor(timeLeft / 3600);
-  const minutes = Math.floor((timeLeft % 3600) / 60);
-  const seconds = timeLeft % 60;
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -69,17 +50,17 @@ function VestSection({ festival }) {
       });
 
       const message = [
-        `Hello PAMFITNESS Festival team.`,
-        ``,
-        `I would like to order PAMFITNESS Festival vest(s).`,
-        ``,
+        "Hello PAMFITNESS Festival team.",
+        "",
+        "I would like to order PAMFITNESS Festival vest(s).",
+        "",
         `Name: ${formData.first_name} ${formData.last_name}`,
         `Phone: ${formData.phone}`,
         `Quantity: ${formData.quantity}`,
         `Price per vest: ₦${vestPrice.toLocaleString()}`,
         `Total: ₦${totalAmount.toLocaleString()}`,
-        ``,
-        `Please send me the payment and collection details.`,
+        "",
+        "Please send me the payment and collection details.",
       ].join("\n");
 
       const whatsappUrl =
@@ -87,7 +68,6 @@ function VestSection({ festival }) {
         encodeURIComponent(message);
 
       setSuccess(true);
-
       window.open(whatsappUrl, "_blank");
 
       setFormData({
@@ -119,32 +99,11 @@ function VestSection({ festival }) {
               OFFICIAL FESTIVAL VEST
             </p>
 
-            <div className="vest-promo">
-              <strong>🔥 LIMITED-TIME OFFER</strong>
-
-              <div className="vest-promo-timer-label">
-                PROMO ENDS IN
-              </div>
-
-              <div className="vest-promo-timer">
-                <span>
-                  {String(hours).padStart(2, "0")}
-                </span>
-                <b>:</b>
-                <span>
-                  {String(minutes).padStart(2, "0")}
-                </span>
-                <b>:</b>
-                <span>
-                  {String(seconds).padStart(2, "0")}
-                </span>
-              </div>
-
-              <small>
-                HURRY — SECURE YOUR OFFICIAL FESTIVAL
-                VEST AT THE PROMOTIONAL PRICE.
-              </small>
-            </div>
+            {!isOpen && (
+              <p className="section-eyebrow">
+                2026 FESTIVAL ARCHIVE
+              </p>
+            )}
 
             <h2>
               WEAR THE
@@ -157,9 +116,7 @@ function VestSection({ festival }) {
             </p>
 
             <div className="vest-price">
-              <span>
-                ₦{vestPrice.toLocaleString()}
-              </span>
+              <span>₦{vestPrice.toLocaleString()}</span>
 
               <del>₦12,000</del>
 
@@ -170,112 +127,107 @@ function VestSection({ festival }) {
               SAVE ₦2,000
             </p>
 
-            <p className="vest-note">
-              Payment and collection details will be handled
-              through WhatsApp.
-            </p>
+            {isOpen ? (
+              <p className="vest-note">
+                Payment and collection details will be handled
+                through WhatsApp.
+              </p>
+            ) : (
+              <p className="vest-note">
+                Vest orders for {festival.name} have ended.
+                Thank you for being part of the festival.
+              </p>
+            )}
           </div>
 
-          <form
-            className="vest-form"
-            onSubmit={handleSubmit}
-          >
-            <div className="form-field">
-              <label htmlFor="vest-first-name">
-                First Name *
-              </label>
-
-              <input
-                id="vest-first-name"
-                name="first_name"
-                type="text"
-                value={formData.first_name}
-                onChange={handleChange}
-                required
-                placeholder="Your first name"
-              />
-            </div>
-
-            <div className="form-field">
-              <label htmlFor="vest-last-name">
-                Last Name *
-              </label>
-
-              <input
-                id="vest-last-name"
-                name="last_name"
-                type="text"
-                value={formData.last_name}
-                onChange={handleChange}
-                required
-                placeholder="Your last name"
-              />
-            </div>
-
-            <div className="form-field">
-              <label htmlFor="vest-phone">
-                Phone Number *
-              </label>
-
-              <input
-                id="vest-phone"
-                name="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                placeholder="08123456789"
-              />
-            </div>
-
-            <div className="form-field">
-              <label htmlFor="vest-quantity">
-                Quantity
-              </label>
-
-              <input
-                id="vest-quantity"
-                name="quantity"
-                type="number"
-                min="1"
-                max="20"
-                value={formData.quantity}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="vest-total">
-              <span>TOTAL</span>
-
-              <strong>
-                ₦{totalAmount.toLocaleString()}
-              </strong>
-            </div>
-
-            {error && (
-              <div className="form-error">
-                {error}
+          {isOpen ? (
+            <form className="vest-form" onSubmit={handleSubmit}>
+              <div className="form-field">
+                <label htmlFor="vest-first-name">First Name *</label>
+                <input
+                  id="vest-first-name"
+                  name="first_name"
+                  type="text"
+                  value={formData.first_name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Your first name"
+                />
               </div>
-            )}
 
-            {success && (
-              <div className="vest-success">
-                Order recorded. WhatsApp has been opened
-                with your order details.
+              <div className="form-field">
+                <label htmlFor="vest-last-name">Last Name *</label>
+                <input
+                  id="vest-last-name"
+                  name="last_name"
+                  type="text"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Your last name"
+                />
               </div>
-            )}
 
-            <button
-              type="submit"
-              className="btn btn-primary vest-submit"
-              disabled={submitting}
-            >
-              {submitting
-                ? "PROCESSING..."
-                : "ORDER VEST VIA WHATSAPP"}
-            </button>
-          </form>
+              <div className="form-field">
+                <label htmlFor="vest-phone">Phone Number *</label>
+                <input
+                  id="vest-phone"
+                  name="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  placeholder="08123456789"
+                />
+              </div>
+
+              <div className="form-field">
+                <label htmlFor="vest-quantity">Quantity</label>
+                <input
+                  id="vest-quantity"
+                  name="quantity"
+                  type="number"
+                  min="1"
+                  max="20"
+                  value={formData.quantity}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="vest-total">
+                <span>TOTAL</span>
+                <strong>₦{totalAmount.toLocaleString()}</strong>
+              </div>
+
+              {error && <div className="form-error">{error}</div>}
+
+              {success && (
+                <div className="vest-success">
+                  Order recorded. WhatsApp has been opened
+                  with your order details.
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="btn btn-primary vest-submit"
+                disabled={submitting}
+              >
+                {submitting
+                  ? "PROCESSING..."
+                  : "ORDER VEST VIA WHATSAPP"}
+              </button>
+            </form>
+          ) : (
+            <div className="vest-form">
+              <h3>Vest orders are closed</h3>
+              <p>
+                Thank you for supporting PAMFITNESS FESTIVAL 2026.
+                Follow our social media pages for future announcements.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>

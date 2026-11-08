@@ -1,26 +1,50 @@
+
 import { useState } from "react";
 import { updateVendorStatus } from "../../services/adminService";
 
-function VendorDetails({ vendor, onClose, onUpdated }) {
+function VendorDetails({
+  vendor,
+  festivalId,
+  festivalStatus,
+  onClose,
+  onUpdated,
+}) {
   const [updating, setUpdating] = useState(false);
   const [updateError, setUpdateError] = useState("");
+
+  const canManageVendors =
+    Boolean(festivalId) &&
+    !["DRAFT", "ARCHIVED"].includes(festivalStatus);
 
   if (!vendor) {
     return null;
   }
 
   async function handleStatusUpdate(status) {
+    if (updating) return;
+
     try {
       setUpdating(true);
       setUpdateError("");
 
-      const updatedVendor = await updateVendorStatus(
-  vendor.id,
-  status
-);
+      if (!festivalId) {
+        throw new Error("No festival is selected.");
+      }
 
-onUpdated(updatedVendor);
-onClose();
+      if (!canManageVendors) {
+        throw new Error(
+          "Vendor applications cannot be modified for this festival."
+        );
+      }
+
+      const updatedVendor = await updateVendorStatus(
+        vendor.id,
+        festivalId,
+        status
+      );
+
+      onUpdated(updatedVendor);
+      onClose();
     } catch (err) {
       setUpdateError(err.message);
     } finally {
@@ -57,37 +81,27 @@ onClose();
             <div className="admin-detail-grid">
               <div className="admin-detail-item">
                 <span>Business Name</span>
-                <strong>
-                  {vendor.business_name || "—"}
-                </strong>
+                <strong>{vendor.business_name || "—"}</strong>
               </div>
 
               <div className="admin-detail-item">
                 <span>Contact Person</span>
-                <strong>
-                  {vendor.contact_name || "—"}
-                </strong>
+                <strong>{vendor.contact_name || "—"}</strong>
               </div>
 
               <div className="admin-detail-item">
                 <span>Phone</span>
-                <strong>
-                  {vendor.phone || "—"}
-                </strong>
+                <strong>{vendor.phone || "—"}</strong>
               </div>
 
               <div className="admin-detail-item">
                 <span>Email</span>
-                <strong>
-                  {vendor.email || "—"}
-                </strong>
+                <strong>{vendor.email || "—"}</strong>
               </div>
 
               <div className="admin-detail-item">
                 <span>Category</span>
-                <strong>
-                  {vendor.category || "—"}
-                </strong>
+                <strong>{vendor.category || "—"}</strong>
               </div>
 
               <div className="admin-detail-item">
@@ -105,16 +119,14 @@ onClose();
             <div className="admin-detail-grid">
               <div className="admin-detail-item">
                 <span>Number of Stands</span>
-                <strong>
-                  {vendor.number_of_stands}
-                </strong>
+                <strong>{vendor.number_of_stands ?? "—"}</strong>
               </div>
 
               <div className="admin-detail-item">
                 <span>Unit Price</span>
                 <strong>
                   ₦{Number(
-                    vendor.unit_price
+                    vendor.unit_price || 0
                   ).toLocaleString()}
                 </strong>
               </div>
@@ -123,22 +135,27 @@ onClose();
                 <span>Total Amount</span>
                 <strong>
                   ₦{Number(
-                    vendor.total_amount
+                    vendor.total_amount || 0
                   ).toLocaleString()}
                 </strong>
               </div>
 
               <div className="admin-detail-item">
                 <span>Status</span>
+                <strong>{vendor.status || "—"}</strong>
 
-                <strong>
-                  {vendor.status || "—"}
-                </strong>
+                {!canManageVendors && (
+                  <p>
+                    {!festivalId
+                      ? "No festival is selected. Status changes are disabled."
+                      : `This festival is ${festivalStatus?.toLowerCase()}. Vendor status changes are disabled.`}
+                  </p>
+                )}
 
                 <div className="admin-status-actions">
                   <button
                     type="button"
-                    disabled={updating}
+                    disabled={updating || !canManageVendors}
                     onClick={() =>
                       handleStatusUpdate("PENDING")
                     }
@@ -148,7 +165,7 @@ onClose();
 
                   <button
                     type="button"
-                    disabled={updating}
+                    disabled={updating || !canManageVendors}
                     onClick={() =>
                       handleStatusUpdate("APPROVED")
                     }
@@ -158,7 +175,7 @@ onClose();
 
                   <button
                     type="button"
-                    disabled={updating}
+                    disabled={updating || !canManageVendors}
                     onClick={() =>
                       handleStatusUpdate("REJECTED")
                     }
@@ -167,8 +184,10 @@ onClose();
                   </button>
                 </div>
 
+                {updating && <p>Updating vendor status...</p>}
+
                 {updateError && (
-                  <p>{updateError}</p>
+                  <p role="alert">{updateError}</p>
                 )}
               </div>
 
@@ -189,9 +208,7 @@ onClose();
               style={{ marginTop: "18px" }}
             >
               <span>Description</span>
-              <strong>
-                {vendor.description || "—"}
-              </strong>
+              <strong>{vendor.description || "—"}</strong>
             </div>
           </section>
         </div>

@@ -1,21 +1,45 @@
+
 import { useState } from "react";
 import { updateVestOrderStatus } from "../../services/adminService";
 
-function VestOrderDetails({ order, onClose, onUpdated }) {
+function VestOrderDetails({
+  order,
+  festivalId,
+  festivalStatus,
+  onClose,
+  onUpdated,
+}) {
   const [updating, setUpdating] = useState(false);
   const [updateError, setUpdateError] = useState("");
+
+  const canManageOrders =
+    Boolean(festivalId) &&
+    !["DRAFT", "ARCHIVED"].includes(festivalStatus);
 
   if (!order) {
     return null;
   }
 
   async function handleStatusUpdate(status) {
+    if (updating) return;
+
     try {
       setUpdating(true);
       setUpdateError("");
 
+      if (!festivalId) {
+        throw new Error("No festival is selected.");
+      }
+
+      if (!canManageOrders) {
+        throw new Error(
+          "Vest orders cannot be modified for this festival."
+        );
+      }
+
       const updatedOrder = await updateVestOrderStatus(
         order.id,
+        festivalId,
         status
       );
 
@@ -59,23 +83,17 @@ function VestOrderDetails({ order, onClose, onUpdated }) {
             <div className="admin-detail-grid">
               <div className="admin-detail-item">
                 <span>First Name</span>
-                <strong>
-                  {order.first_name || "—"}
-                </strong>
+                <strong>{order.first_name || "—"}</strong>
               </div>
 
               <div className="admin-detail-item">
                 <span>Last Name</span>
-                <strong>
-                  {order.last_name || "—"}
-                </strong>
+                <strong>{order.last_name || "—"}</strong>
               </div>
 
               <div className="admin-detail-item">
                 <span>Phone</span>
-                <strong>
-                  {order.phone || "—"}
-                </strong>
+                <strong>{order.phone || "—"}</strong>
               </div>
             </div>
           </section>
@@ -86,16 +104,14 @@ function VestOrderDetails({ order, onClose, onUpdated }) {
             <div className="admin-detail-grid">
               <div className="admin-detail-item">
                 <span>Quantity</span>
-                <strong>
-                  {order.quantity}
-                </strong>
+                <strong>{order.quantity ?? "—"}</strong>
               </div>
 
               <div className="admin-detail-item">
                 <span>Unit Price</span>
                 <strong>
                   ₦{Number(
-                    order.unit_price
+                    order.unit_price || 0
                   ).toLocaleString()}
                 </strong>
               </div>
@@ -104,7 +120,7 @@ function VestOrderDetails({ order, onClose, onUpdated }) {
                 <span>Total Amount</span>
                 <strong>
                   ₦{Number(
-                    order.total_amount
+                    order.total_amount || 0
                   ).toLocaleString()}
                 </strong>
               </div>
@@ -112,14 +128,20 @@ function VestOrderDetails({ order, onClose, onUpdated }) {
               <div className="admin-detail-item">
                 <span>Status</span>
 
-                <strong>
-                  {order.status || "—"}
-                </strong>
+                <strong>{order.status || "—"}</strong>
+
+                {!canManageOrders && (
+                  <p>
+                    {!festivalId
+                      ? "No festival is selected. Status changes are disabled."
+                      : `This festival is ${festivalStatus?.toLowerCase()}. Order status changes are disabled.`}
+                  </p>
+                )}
 
                 <div className="admin-status-actions">
                   <button
                     type="button"
-                    disabled={updating}
+                    disabled={updating || !canManageOrders}
                     onClick={() =>
                       handleStatusUpdate("PENDING")
                     }
@@ -129,7 +151,7 @@ function VestOrderDetails({ order, onClose, onUpdated }) {
 
                   <button
                     type="button"
-                    disabled={updating}
+                    disabled={updating || !canManageOrders}
                     onClick={() =>
                       handleStatusUpdate("APPROVED")
                     }
@@ -139,7 +161,7 @@ function VestOrderDetails({ order, onClose, onUpdated }) {
 
                   <button
                     type="button"
-                    disabled={updating}
+                    disabled={updating || !canManageOrders}
                     onClick={() =>
                       handleStatusUpdate("REJECTED")
                     }
@@ -148,8 +170,12 @@ function VestOrderDetails({ order, onClose, onUpdated }) {
                   </button>
                 </div>
 
+                {updating && (
+                  <p>Updating vest order status...</p>
+                )}
+
                 {updateError && (
-                  <p>{updateError}</p>
+                  <p role="alert">{updateError}</p>
                 )}
               </div>
 

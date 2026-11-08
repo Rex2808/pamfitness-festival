@@ -18,6 +18,7 @@ import InviteSetup from "./pages/admin/InviteSetup";
 
 import AdminLayout from "./layouts/AdminLayout";
 import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
+import Festivals from "./pages/admin/Festivals";
 
 function App() {
   return (
@@ -64,6 +65,19 @@ function App() {
           </ProtectedAdminRoute>
         }
       />
+
+      <Route
+  path="/admin/festivals"
+  element={
+    <ProtectedAdminRoute
+      allowedRoles={["PLATFORM_ADMIN"]}
+    >
+      <AdminLayout>
+        <Festivals />
+      </AdminLayout>
+    </ProtectedAdminRoute>
+  }
+/>
 
       <Route
         path="/admin/activities"

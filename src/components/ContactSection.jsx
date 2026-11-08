@@ -1,3 +1,4 @@
+
 import {
   MapPin,
   CalendarDays,
@@ -7,6 +8,8 @@ import {
 } from "lucide-react";
 
 function ContactSection({ festival }) {
+  const isOpen = festival?.status === "OPEN";
+
   const eventDate = new Date(`${festival.event_date}T00:00:00`);
 
   const formattedDate = eventDate.toLocaleDateString("en-GB", {
@@ -33,16 +36,19 @@ function ContactSection({ festival }) {
     <section className="contact-section" id="contact">
       <div className="section-container">
         <div className="contact-header">
-          <p className="section-eyebrow">FIND US</p>
+          <p className="section-eyebrow">
+            {isOpen ? "FIND US" : "STAY CONNECTED"}
+          </p>
 
           <h2>
-            COME BE PART OF THE
+            {isOpen ? "COME BE PART OF THE" : "THANK YOU FOR BEING PART OF THE"}
             <span> EXPERIENCE.</span>
           </h2>
 
           <p>
-           Everything you need to know about when and where
-           {festival.name} is happening.
+            {isOpen
+              ? `Everything you need to know about when and where ${festival.name} is happening.`
+              : `${festival.name} has concluded. Stay connected with PAMFITNESS for future announcements and events.`}
           </p>
         </div>
 
@@ -53,16 +59,12 @@ function ContactSection({ festival }) {
             </div>
 
             <p className="contact-label">VENUE</p>
-
             <h3>{festival.venue}</h3>
-
-          
           </div>
 
           <div className="contact-details">
             <div className="contact-detail">
               <CalendarDays size={22} />
-
               <div>
                 <span>DATE</span>
                 <strong>{formattedDate}</strong>
@@ -71,7 +73,6 @@ function ContactSection({ festival }) {
 
             <div className="contact-detail">
               <Clock size={22} />
-
               <div>
                 <span>TIME</span>
                 <strong>{formattedTime}</strong>
@@ -80,7 +81,6 @@ function ContactSection({ festival }) {
 
             <div className="contact-detail">
               <Phone size={22} />
-
               <div>
                 <span>PHONE</span>
                 <strong>{displayPhone}</strong>
@@ -100,35 +100,41 @@ function ContactSection({ festival }) {
             CHAT ON WHATSAPP
           </a>
 
-          <a
-            href={festival.facebook_url}
-            target="_blank"
-            rel="noreferrer"
-            className="contact-social"
-          >
-            <span>F</span>
-            FACEBOOK
-          </a>
+          {festival.facebook_url && (
+            <a
+              href={festival.facebook_url}
+              target="_blank"
+              rel="noreferrer"
+              className="contact-social"
+            >
+              <span>F</span>
+              FACEBOOK
+            </a>
+          )}
 
-          <a
-            href={festival.instagram_url}
-            target="_blank"
-            rel="noreferrer"
-            className="contact-social"
-          >
-            <span>IG</span>
-            INSTAGRAM
-          </a>
+          {festival.instagram_url && (
+            <a
+              href={festival.instagram_url}
+              target="_blank"
+              rel="noreferrer"
+              className="contact-social"
+            >
+              <span>IG</span>
+              INSTAGRAM
+            </a>
+          )}
 
-          <a
-            href={festival.tiktok_url}
-            target="_blank"
-            rel="noreferrer"
-            className="contact-social"
-          >
-            <span>TT</span>
-            TIKTOK
-          </a>
+          {festival.tiktok_url && (
+            <a
+              href={festival.tiktok_url}
+              target="_blank"
+              rel="noreferrer"
+              className="contact-social"
+            >
+              <span>TT</span>
+              TIKTOK
+            </a>
+          )}
         </div>
       </div>
     </section>

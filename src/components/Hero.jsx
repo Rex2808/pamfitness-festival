@@ -1,6 +1,9 @@
+
 import Countdown from "./Countdown";
 
 function Hero({ festival }) {
+  const isOpen = festival?.status === "OPEN";
+
   return (
     <section
       className="hero"
@@ -20,24 +23,43 @@ function Hero({ festival }) {
           {festival.event_date} • {festival.start_time}
         </p>
 
-       <p className="hero-location">
+        <p className="hero-location">
           {festival.venue}
-
-           <br />
-           {festival.address}
-          </p>
+          <br />
+          {festival.address}
+        </p>
 
         <div className="hero-actions">
-          <a href="#register" className="btn btn-primary">
-            REGISTER FOR FREE
-          </a>
+          {isOpen ? (
+            <>
+              <a href="#register" className="btn btn-primary">
+                REGISTER FOR FREE
+              </a>
 
-          <a href="#vest" className="btn btn-secondary">
-            GET YOUR VEST
-          </a>
+              <a href="#vest" className="btn btn-secondary">
+                GET YOUR VEST
+              </a>
+            </>
+          ) : (
+            <>
+              <a href="#gallery" className="btn btn-primary">
+                VIEW FESTIVAL GALLERY
+              </a>
+
+              <a href="#activities" className="btn btn-secondary">
+                EXPLORE ACTIVITIES
+              </a>
+            </>
+          )}
         </div>
 
-        <Countdown festival={festival} />
+        {isOpen ? (
+          <Countdown festival={festival} />
+        ) : (
+          <p className="hero-theme">
+            FESTIVAL COMPLETED • THANK YOU FOR BEING PART OF IT
+          </p>
+        )}
       </div>
     </section>
   );
